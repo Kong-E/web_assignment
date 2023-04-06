@@ -1,0 +1,20 @@
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+table {
+  border: 2px solid #111;
+  border-collapse: collapse;
+  text-align: center;
+  flex-wrap: nowrap;
+  width: 800px;
+}
+th,
+td {
+  border: 1px solid #111;
+  padding: 10px 20px;
+}
+th {
+  width: 50px;
+}

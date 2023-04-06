@@ -1,0 +1,74 @@
+.impt {
+  font-size: 18px;
+  font-weight: bold;
+}
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+h1 {
+  margin: 0;
+  margin-bottom: 25px;
+  margin-right: 15px;
+  display: block;
+  width: 1040px;
+  font-size: 45px;
+  text-align: end;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container > div {
+  margin-left: 20px;
+}
+img {
+  border-radius: 10px;
+}
+.desc {
+  flex-wrap: nowrap;
+  width: 600px;
+}
+table {
+  width: 600px;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+th {
+  background-color: #ebebeb;
+  font-size: 18px;
+}
+table.ingred th {
+  padding: 5px 10px;
+}
+table.ingred td {
+  padding: 0 6px;
+  text-align: center;
+  border-right: 1px solid #ebebeb;
+}
+table.ingred tr:first-child {
+  border-bottom: 1px solid #ebebeb;
+}
+table.ingred tr:first-child td:last-child {
+  border-right: none;
+}
+table.ingred tr:last-child td:last-child {
+  border-right: none;
+}
+table.cook th {
+  padding: 5px 0;
+}
+table.cook td {
+  border-bottom: 1px solid #ebebeb;
+}
+table.cook tr:last-child td {
+  border: none;
+}

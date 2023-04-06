@@ -1,0 +1,71 @@
+.black {
+  background-color: #111;
+}
+
+.button_wrapper {
+  margin-top: 10px;
+}
+#button1,
+#button2,
+#button3 {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.15s ease-in-out;
+}
+#button1:hover,
+#button2:hover,
+#button3:hover {
+  transform: scale(1.05);
+}
+/* Define the styles of the heart container */
+.heart-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Make sure the heart container doesn't interfere with other elements */
+  z-index: 100;
+}
+
+/* Define the styles of the heart emoticon */
+.heart {
+  font-size: 30px;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  opacity: 0; /* Hide the heart emoticons by default */
+  animation: show-heart 1s ease-in-out forwards; /* Add an animation effect to show the heart emoticons */
+}
+
+@keyframes show-heart {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes move-heart {
+  0% {
+    top: 100%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0;
+  }
+}

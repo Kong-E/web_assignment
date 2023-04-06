@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      button {
+        background-color: pink;
+        width: 150px;
+        height: 70px;
+        cursor: pointer;
+        font-size: 30px;
+      }
+      #btn1:hover {
+        background-color: yellow;
+        cursor: grab;
+      }
+      #btn2:active {
+        background-color: #fff;
+        cursor: grabbing;
+      }
+      button:disabled {
+        cursor: progress;
+      }
+      a {
+        font-size: 32px;
+      }
+      a:any-link:hover {
+        color: yellowgreen;
+      }
+      a:any-link:active {
+        background-color: blue;
+        color: pink;
+      }
+      ::selection {
+        background-color: yellow;
+        color: #111;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>고추장찌개 레시피</h1>
+    <button
+      id="btn1"
+      onclick="setTimeout(()=>{
+      document.getElementsByTagName('h1')[0].innerHTML = '<i>백종원</i>찌개 레시피'
+      setTimeout(function(){
+        document.getElementsByTagName('h1')[0].innerHTML = `<i style='color: red'>백종원</i>찌개 레시피` 
+        document.getElementsByTagName('a')[0].innerHTML = '빨간색변환'       
+      },3000)
+    },3000)
+    "
+    >
+      버튼1
+    </button>
+    <button
+      id="btn2"
+      onclick="setTimeout(()=>{
+      document.getElementsByTagName('h1')[0].innerHTML = '<i>백종원</i>찌개 레시피'
+    },3000)
+    setTimeout(function(){
+      document.getElementsByTagName('h1')[0].innerHTML = `<i style='color: red'>백종원</i>찌개 레시피`        
+    },6000)"
+    >
+      버튼2
+    </button>
+    <button id="btn3" disabled>버튼3</button>
+    <a href="#">네이버</a>
+  </body>
+</html>

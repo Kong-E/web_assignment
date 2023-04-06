@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Nord Design System</title>
+    <link
+      rel="stylesheet"
+      href="https://nordcdn.net/ds/css/2.4.1/nord.min.css"
+      integrity="sha384-7yCjjICdCmNLaOvslgtJXsmXDQehOXxb8YW+FQni9dmtkaOspP9zIDmijNI38BAq"
+      crossorigin="anonymous"
+    />
+    <script
+      type="module"
+      src="https://nordcdn.net/ds/components/2.16.1/index.js"
+      integrity="sha384-3VNQv4DTPzNiJU6FTC3hKnUTIRKsdV2gjGn349M6WUcFE2ZkrN6mHFVvdGxxC6nz"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      .num {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        background-color: #ddd;
+      }
+      .skeleton-overview header {
+        display: flex;
+        align-items: center;
+        margin-block-end: var(--n-space-s);
+      }
+      .skeleton-overview header nord-skeleton:last-child {
+        flex: 0 0 auto;
+        inline-size: 30%;
+      }
+      .skeleton-overview nord-skeleton {
+        margin-bottom: var(--n-space-m);
+      }
+      .skeleton-overview nord-skeleton:nth-child(1) {
+        inline-size: 3rem;
+        block-size: 3rem;
+        margin-inline-end: var(--n-space-m);
+      }
+      .skeleton-overview nord-skeleton:nth-child(3) {
+        inline-size: 90%;
+      }
+      .skeleton-overview nord-skeleton:nth-child(4) {
+        inline-size: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="num">1 Button</div>
+    <nord-button variant="primary">Hello Nordie</nord-button>
+    <div class="num">2 Avatar</div>
+    <nord-stack align-items="center" direction="horizontal">
+      <nord-avatar name="Laura Williams" size="s"></nord-avatar>
+      <nord-avatar name="Laura Williams" size="m"></nord-avatar>
+      <nord-avatar name="Laura Williams" size="l"></nord-avatar>
+    </nord-stack>
+    <div class="num">3 button group</div>
+    <nord-visually-hidden id="label">Send options</nord-visually-hidden>
+    <nord-button-group aria-labelledby="label">
+      <nord-button variant="primary">Send invoice</nord-button>
+      <nord-dropdown size="s" align="end">
+        <nord-button slot="toggle" variant="primary">
+          <nord-icon name="arrow-down-small"></nord-icon>
+        </nord-button>
+        <nord-dropdown-item>Send later today</nord-dropdown-item>
+        <nord-dropdown-item>Send tomorrow</nord-dropdown-item>
+        <nord-dropdown-item>Mark as paid</nord-dropdown-item>
+      </nord-dropdown>
+    </nord-button-group>
+    <div class="num">4 Checkbox</div>
+    <nord-checkbox label="Label" value="Value"></nord-checkbox>
+    <div class="num">5 Date picker</div>
+    <nord-date-picker label="Label" value="2021-01-13"></nord-date-picker>
+    <div class="num">6 Dropdown</div>
+    <nord-stack
+      direction="horizontal"
+      justify-content="center"
+      style="margin-bottom: calc(var(--n-space-xxl) * 3)"
+    >
+      <nord-dropdown size="s">
+        <nord-button slot="toggle">Menu</nord-button>
+        <nord-dropdown-item href="#">View profile</nord-dropdown-item>
+        <nord-dropdown-item>Settings</nord-dropdown-item>
+        <nord-dropdown-item>Show keyboard shortcuts</nord-dropdown-item>
+        <nord-dropdown-item>Help & Support</nord-dropdown-item>
+        <nord-dropdown-item>API</nord-dropdown-item>
+        <nord-dropdown-item>Sign out</nord-dropdown-item>
+      </nord-dropdown>
+    </nord-stack>
+    <div class="num">7 Header</div>
+    <nord-header>
+      <h1 class="n-typescale-l">Dashboard</h1>
+      <nord-button slot="end">Export</nord-button>
+      <nord-button variant="primary" slot="end">
+        <nord-icon slot="start" name="interface-add-small"></nord-icon>
+        Create new
+      </nord-button>
+    </nord-header>
+    <div class="num" v>8 Navigation</div>
+    <nord-navigation style="max-inline-size: 250px">
+      <nord-button slot="header" expand>
+        <nord-avatar slot="start" name="Bath Clinic" variant="square"
+          >B</nord-avatar
+        >
+        Bath Clinic
+        <nord-icon
+          slot="end"
+          class="n-margin-i-s"
+          name="interface-dropdown-small"
+        ></nord-icon>
+      </nord-button>
+      <nord-nav-group heading="Workspace">
+        <nord-nav-item active icon="navigation-dashboard"
+          >Dashboard</nord-nav-item
+        >
+        <nord-nav-item icon="navigation-payments">Payments</nord-nav-item>
+        <nord-nav-item icon="navigation-reports">Reports</nord-nav-item>
+        <nord-nav-item icon="navigation-settings">Settings</nord-nav-item>
+      </nord-nav-group>
+    </nord-navigation>
+    <div class="num">9 Progress bar</div>
+    <nord-progress-bar value="40"></nord-progress-bar>
+    <div class="num">10 Radio</div>
+    <nord-fieldset label="Radios">
+      <nord-stack direction="vertical">
+        <nord-radio label="Option 1" name="test" value="1"></nord-radio>
+        <nord-radio label="Option 2" name="test" value="2"></nord-radio>
+      </nord-stack>
+    </nord-fieldset>
+    <div class="num">11 Select</div>
+    <nord-select name="page-size" value="25" label="Label">
+      <option value="25">25 per page</option>
+      <option value="50">50 per page</option>
+      <option value="100">100 per page</option>
+    </nord-select>
+    <div class="num">12 Skeleton</div>
+    <div class="skeleton-overview" aria-busy="true">
+      <header>
+        <nord-skeleton></nord-skeleton>
+        <nord-skeleton></nord-skeleton>
+      </header>
+      <nord-skeleton></nord-skeleton>
+      <nord-skeleton></nord-skeleton>
+      <nord-skeleton></nord-skeleton>
+      <nord-visually-hidden>Loading</nord-visually-hidden>
+    </div>
+    <div class="num">13 Tooltip</div>
+    <nord-stack align-items="center" style="margin: var(--n-space-xl) auto">
+      <nord-button aria-describedby="tooltip">View tooltip</nord-button>
+    </nord-stack>
+
+    <nord-tooltip id="tooltip">I'm a tooltip</nord-tooltip>
+
+    <div class="num">14 Spinner</div>
+    <nord-spinner size="xl"></nord-spinner>
+
+    <div class="num">15 Modal</div>
+    <nord-button variant="primary" id="openButton">Open modal</nord-button>
+
+    <nord-modal id="modal" size="s" open aria-labelledby="title">
+      <h2 slot="header" id="title">Modal title</h2>
+      <p class="n-reset">Modal body text goes here.</p>
+
+      <nord-button slot="footer" expand id="cancelButton">Cancel</nord-button>
+      <nord-button
+        slot="footer"
+        expand
+        id="confirmButton"
+        variant="primary"
+        autofocus
+        >Save changes</nord-button
+      >
+    </nord-modal>
+
+    <div class="num">16 Card</div>
+    <nord-card>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla provident
+      aliquid corporis tempora eius quam, quae vel molestias esse maxime aperiam
+      totam suscipit. Nobis consectetur optio reprehenderit animi? Suscipit,
+      quibusdam?
+    </nord-card>
+
+    <div class="num">17 Badge</div>
+    <nord-stack direction="horizontal" gap="s" wrap>
+      <nord-badge type="success">Success</nord-badge>
+      <nord-badge type="progress">Progress</nord-badge>
+      <nord-badge type="info">Info</nord-badge>
+      <nord-badge type="highlight">Highlight</nord-badge>
+      <nord-badge type="neutral">Neutral</nord-badge>
+      <nord-badge type="warning">Warning</nord-badge>
+      <nord-badge type="danger">Danger</nord-badge>
+    </nord-stack>
+
+    <div class="num">18 Toast</div>
+    <nord-button variant="primary">Add toast</nord-button>
+
+    <nord-toast-group>
+      <nord-toast>Message sent</nord-toast>
+    </nord-toast-group>
+
+    <div class="num">19 Textarea</div>
+    <nord-textarea label="Label" value="Value"></nord-textarea>
+
+    <div class="num">20 Range</div>
+    <nord-range label="Label" value="7" min="0" max="10"></nord-range>
+
+    <script>
+      openButton.addEventListener("click", (e) => modal.showModal());
+      cancelButton.addEventListener("click", () => modal.close());
+      confirmButton.addEventListener("click", () => modal.close());
+
+      // clean up toasts once they are dismissed
+      const group = document.querySelector("nord-toast-group");
+      group.addEventListener("dismiss", (e) => e.target.remove());
+
+      // add toasts on click for demo purposes
+      const buttons = document.querySelectorAll("nord-button");
+      buttons.forEach((element) => {
+        element.addEventListener("click", () => group.addToast("Message sent"));
+      });
+    </script>
+  </body>
+</html>

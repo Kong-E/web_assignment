@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .green {
+        color: green;
+      }
+      .blue {
+        color: blue;
+      }
+      .red {
+        color: red;
+      }
+    </style>
+    <script>
+      function load() {
+        const comfirm = confirm("데이터를 불러오시겠습니까?");
+        if (!comfirm) {
+          console.log("데이터 안 불러옵니다");
+          return;
+        }
+        console.log("데이터를 불러옵니다");
+        fetch(
+          // fetch는 항상 비동기
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/25"
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.RealtimeCityAir);
+
+            for (var i = 0; i < 25; i++) {
+              document.getElementById("data").innerHTML =
+              document.getElementById("data").innerHTML +
+              `<tr>
+                <td class="MSRRGN_NM">${data.RealtimeCityAir.row[i].MSRRGN_NM}</td>
+                <td class="MSRSTE_NM">${data.RealtimeCityAir.row[i].MSRSTE_NM}</td>
+                <td class="IDEX_NM">${data.RealtimeCityAir.row[i].IDEX_NM}</td>
+                <td class="PM10">${data.RealtimeCityAir.row[i].PM10}</td>
+                <td class="PM25">${data.RealtimeCityAir.row[i].PM25}</td>
+                <td class="O3">${data.RealtimeCityAir.row[i].O3}</td>
+                <td class="SO2">${data.RealtimeCityAir.row[i].SO2}</td>
+              </tr>`;
+
+              const IDEX_NMs = document.querySelectorAll(".IDEX_NM")
+              const PM10s = document.querySelectorAll(".PM10")
+              const PM25s = document.querySelectorAll(".PM25")
+
+              // 0일 경우 '-'로 표시
+              PM10s.forEach(PM10 => {if (PM10.innerText === "0") PM10.innerText = "-"})
+              PM25s.forEach(PM25 => {if (PM25.innerText === "0") PM25.innerText = "-"})
+
+              // 보통, 좋음, 나쁨 색깔
+              IDEX_NMs.forEach(IDEX_NM => {
+                switch (IDEX_NM.innerText) {
+                  case '보통':
+                    IDEX_NM.classList.add('green')
+                    break;
+                  case '좋음':
+                    IDEX_NM.classList.add('blue')
+                    break;
+                  case '나쁨':
+                    IDEX_NM.classList.add('red')
+                    break;
+                }})
+              
+              /* 과제
+        0인 부분의 경우엔 "-"를 표시한다. ㅇ
+        서남권, 동남권, ... 구분해서 border가 칠해지게
+        보통은 초록색, 좋음은 파란색, 나쁨은 빨간색 ㅇ
+        통합대기환경지수를 오른쪽에 숫자로 표시 - 서울 상위 5개 구에는 파란색, 하위 5개 구에는 빨간색 */
+            }
+
+            /* document.getElementById("data").innerHTML = `<tr>
+          <td>${data.RealtimeCityAir.row[0].MSRSTE_NM}</td>
+          <td>${data.RealtimeCityAir.row[0].PM10}</td>
+          <td>${data.RealtimeCityAir.row[0].PM25}</td>
+          <td>${data.RealtimeCityAir.row[0].O3}</td>
+          <td>${data.RealtimeCityAir.row[0].SO2}</td>
+        </tr>`; */
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="load()">데이터 불러오기</button>
+    <table>
+      <thead>
+        <th>도시권</th>
+        <th>지역명</th>
+        <th>상태</th>
+        <th>PM10</th>
+        <th>PM25</th>
+        <th>O3</th>
+        <th>SO2</th>
+      </thead>
+      <tbody id="data"></tbody>
+    </table>
+  </body>
+</html>
