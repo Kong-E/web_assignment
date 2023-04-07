@@ -5,131 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      * {
-        text-align: center;
-      }
-      .bold {
-        font-weight: bold;
-      }
-      .green {
-        color: green;
-      }
-      .blue {
-        color: blue;
-      }
-      .red {
-        color: red;
-      }
-      .border_bottom {
-        border-bottom: 1px solid #BEBEBE;
-      }
-      .table {
-        border-collapse: collapse;
-      }
-      th {
-        min-width: 80px;
-        padding: 0 10px;
-      }
-    </style>
-    <script>
-      function load() {
-        const comfirm = confirm("데이터를 불러오시겠습니까?");
-        if (!comfirm) {
-          console.log("데이터 안 불러옵니다");
-          return;
-        }
-        console.log("데이터를 불러옵니다");
-        fetch(
-          // fetch는 항상 비동기
-          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/25"
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data.RealtimeCityAir);
-
-            const IDEX_MVL_Arr = []
-
-            document.getElementById("data").innerHTML = "";
-
-            for (var i = 0; i < 25; i++) {
-              document.getElementById("data").innerHTML =
-              document.getElementById("data").innerHTML +
-              `<tr id="row_${i}" class="table_row">
-                <td class="MSRRGN_NM">${data.RealtimeCityAir.row[i].MSRRGN_NM}</td>
-                <td class="MSRSTE_NM">${data.RealtimeCityAir.row[i].MSRSTE_NM}</td>
-                <td class="IDEX_NM">${data.RealtimeCityAir.row[i].IDEX_NM}</td>
-                <td class="PM10">${data.RealtimeCityAir.row[i].PM10}</td>
-                <td class="PM25">${data.RealtimeCityAir.row[i].PM25}</td>
-                <td class="O3">${data.RealtimeCityAir.row[i].O3}</td>
-                <td class="SO2">${data.RealtimeCityAir.row[i].SO2}</td>
-                <td class="IDEX_MVL">${data.RealtimeCityAir.row[i].IDEX_MVL}</td>
-              </tr>`;
-
-              IDEX_MVL_Arr.push({[`row_${i}`]: data.RealtimeCityAir.row[i].IDEX_MVL})
-            }
-
-            const table_rows = document.querySelectorAll(".table_row")
-            const MSRRGN_NMs = document.querySelectorAll(".MSRRGN_NM")
-            const IDEX_NMs = document.querySelectorAll(".IDEX_NM")
-            const PM10s = document.querySelectorAll(".PM10")
-            const PM25s = document.querySelectorAll(".PM25")
-
-            // 도시권 구분
-            let prevInnerText = MSRRGN_NMs[0].innerText;
-            for (let i=1; i<MSRRGN_NMs.length; i++) {
-              if (prevInnerText != MSRRGN_NMs[i].innerText) {
-                table_rows[i-1].classList.add('border_bottom');
-              }
-              prevInnerText = MSRRGN_NMs[i].innerText;
-            }
-
-            // 0일 경우 '-'로 표시
-            PM10s.forEach(PM10 => {if (PM10.innerText === "0") PM10.innerText = "-"})
-            PM25s.forEach(PM25 => {if (PM25.innerText === "0") PM25.innerText = "-"})
-
-            // 보통, 좋음, 나쁨 색깔
-            IDEX_NMs.forEach(IDEX_NM => {
-              const className = `${IDEX_NM.innerText === '보통' ? 'green' : IDEX_NM.innerText === '좋음' ? 'blue' : 'red'}`;
-              IDEX_NM.classList.add(className);
-            });
-            
-            // 통합대기환경지수 상위 5개 구 파란색, 하위 5개 구 빨간색
-            IDEX_MVL_Arr.sort(function(a, b) {
-              return Object.values(a)[0] - Object.values(b)[0];
-            });
-
-            const top5 = IDEX_MVL_Arr.slice(0, 5);
-            const bottom5 = IDEX_MVL_Arr.slice(-5);
-
-            const topIDs = new Set(top5.map(obj => Object.keys(obj)[0]));
-            const bottomIDs = new Set(bottom5.map(obj => Object.keys(obj)[0]));
-
-            table_rows.forEach(row => {
-                if (topIDs.has(row.id)) {
-                  row.classList.add('blue', 'bold');
-                } else if (bottomIDs.has(row.id)) {
-                  row.classList.add('red', 'bold');
-                }
-              });
-            });
-      }
-    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js"></script>
   </head>
-  <body>
-    <button onclick="load()">데이터 불러오기</button>
-    <table class="table">
-      <thead>
-        <th>도시권</th>
-        <th>지역명</th>
-        <th>상태</th>
-        <th>미세먼지</th>
-        <th>초미세먼지농도</th>
-        <th>오존</th>
-        <th>아황산가스농도</th>
-        <th>통합대기환경지수</th>
-      </thead>
-      <tbody id="data"></tbody>
-    </table>
+  <body class="font-medium container">
+    <button
+      onclick="load()"
+      class="button text-xl text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+    >
+      데이터 불러오기
+    </button>
+    <div class="relative overflow-x-auto">
+      <table class="text-base text-center dark:text-gray-400 table">
+        <thead id="head" class="bg_slate rounded"></thead>
+        <tbody id="data"></tbody>
+      </table>
+    </div>
   </body>
 </html>
