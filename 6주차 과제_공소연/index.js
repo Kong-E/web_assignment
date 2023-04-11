@@ -1,3 +1,6 @@
+let chart;
+let chart2;
+
 async function load() {
   const comfirm = confirm("데이터를 불러오시겠습니까?");
   if (!comfirm) {
@@ -10,6 +13,11 @@ async function load() {
     "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/25"
   );
   const res2 = await res.json();
+
+  if (chart && chart2) {
+    chart.destroy();
+    chart2.destroy();
+  }
 
   console.log(res2.RealtimeCityAir);
 
@@ -55,7 +63,7 @@ async function load() {
   const ctx = document.getElementById("myChart");
   const ctx2 = document.getElementById("myChart2");
 
-  new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: "bar",
     data: {
       labels: labels,
@@ -76,7 +84,7 @@ async function load() {
     },
   });
 
-  new Chart(ctx2, {
+  chart2 = new Chart(ctx2, {
     type: "bar",
     data: {
       labels: labels,

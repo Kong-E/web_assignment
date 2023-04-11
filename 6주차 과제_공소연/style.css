@@ -4,6 +4,7 @@ body {
   justify-content: center;
   align-items: center;
   color: #475569;
+  overflow-x: hidden;
 }
 .container::-webkit-scrollbar {
   width: 15px;
