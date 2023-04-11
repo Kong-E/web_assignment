@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>미세먼지 화면 만들기</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,6 +17,15 @@
     />
     <link rel="stylesheet" href="style.css" />
     <script src="index.js"></script>
+    <!-- 프리로드 -->
+    <script src="chart.js"></script>
+    <script>
+      /* //도큐먼트가 로드된 뒤 실행
+      document.onload = function () {
+        const ct2 = document.getElementById("myChart");
+        console.log(ct2);
+      }; */
+    </script>
   </head>
   <body class="font-medium container">
     <button
@@ -31,5 +40,38 @@
         <tbody id="data"></tbody>
       </table>
     </div>
+
+    <div>
+      <canvas id="myChart" width="1000px" height="500px"></canvas>
+    </div>
+    <div>
+      <canvas id="myChart2" width="1000px" height="500px"></canvas>
+    </div>
+
+    <!--다 로딩이 된다음 -->
+    <script>
+      const ctx2 = document.getElementById("myChart2");
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [
+            {
+              label: "# of Votes",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
   </body>
 </html>
