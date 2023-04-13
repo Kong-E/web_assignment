@@ -1,6 +1,14 @@
 let chart;
 let chart2;
 
+function zeroToMinus(data) {
+  if (data === 0 || data === "") {
+    return "-";
+  } else {
+    return data;
+  }
+}
+
 async function load() {
   const comfirm = confirm("데이터를 불러오시겠습니까?");
   if (!comfirm) {
@@ -42,14 +50,31 @@ async function load() {
     document.getElementById("data").innerHTML =
       document.getElementById("data").innerHTML +
       `<tr id="row_${i}" class="table_row">
-          <td class="px-6 py-4 MSRRGN_NM">${res2.RealtimeCityAir.row[i].MSRRGN_NM}</td>
-          <td class="px-6 py-4 MSRSTE_NM">${res2.RealtimeCityAir.row[i].MSRSTE_NM}</td>
-          <td class="px-6 py-4 IDEX_NM">${res2.RealtimeCityAir.row[i].IDEX_NM}</td>
-          <td class="px-6 py-4 PM10">${res2.RealtimeCityAir.row[i].PM10}</td>
-          <td class="px-6 py-4 PM25">${res2.RealtimeCityAir.row[i].PM25}</td>
-          <td class="px-6 py-4 O3">${res2.RealtimeCityAir.row[i].O3}</td>
-          <td class="px-6 py-4 SO2">${res2.RealtimeCityAir.row[i].SO2}</td>
-          <td class="px-6 py-4 IDEX_MVL">${res2.RealtimeCityAir.row[i].IDEX_MVL}</td>
+          <td class="px-6 py-4 MSRRGN_NM">${
+            res2.RealtimeCityAir.row[i].MSRRGN_NM
+          }</td>
+          <td class="px-6 py-4 MSRSTE_NM">${
+            res2.RealtimeCityAir.row[i].MSRSTE_NM
+          }</td>
+          <td class="px-6 py-4 IDEX_NM">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].IDEX_NM
+          )}</td>
+          <td class="px-6 py-4 PM10">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].PM10
+          )}
+             </td>
+          <td class="px-6 py-4 PM25">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].PM25
+          )}</td>
+          <td class="px-6 py-4 O3">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].O3
+          )}</td>
+          <td class="px-6 py-4 SO2">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].SO2
+          )}</td>
+          <td class="px-6 py-4 IDEX_MVL">${zeroToMinus(
+            res2.RealtimeCityAir.row[i].IDEX_MVL
+          )}</td>
         </tr>`;
 
     labels.push(res2.RealtimeCityAir.row[i].MSRSTE_NM);
@@ -60,6 +85,7 @@ async function load() {
     });
   }
 
+  //chart
   const ctx = document.getElementById("myChart");
   const ctx2 = document.getElementById("myChart2");
 
@@ -72,6 +98,10 @@ async function load() {
           label: "PM10",
           data: dataList,
           borderWidth: 1,
+          backgroundColor: "#ff0000",
+          borderWidth: 1,
+          borderRadius: 10,
+          borderSkipped: false,
         },
       ],
     },
@@ -108,13 +138,14 @@ async function load() {
   const table_rows = document.querySelectorAll(".table_row");
   const MSRRGN_NMs = document.querySelectorAll(".MSRRGN_NM");
   const IDEX_NMs = document.querySelectorAll(".IDEX_NM");
-  const PM10s = document.querySelectorAll(".PM10");
+  /*   const PM10s = document.querySelectorAll(".PM10");
   const PM25s = document.querySelectorAll(".PM25");
   const O3s = document.querySelectorAll(".O3");
   const SO2s = document.querySelectorAll(".SO2");
-  const IDEX_MVLs = document.querySelectorAll(".IDEX_MVL");
+  const IDEX_MVLs = document.querySelectorAll(".IDEX_MVL"); */
 
   // 도시권 구분
+  // 위의 for문 안에서 숏서킷으로 구현할 수도 있음
   let prevInnerText = MSRRGN_NMs[0].innerText;
   for (let i = 1; i < MSRRGN_NMs.length; i++) {
     if (prevInnerText != MSRRGN_NMs[i].innerText) {
@@ -124,13 +155,13 @@ async function load() {
   }
 
   // 0일 경우 '-'로 표시
-  const elements = [...PM10s, ...PM25s, ...O3s, ...SO2s, ...IDEX_MVLs];
+  /*   const elements = [...PM10s, ...PM25s, ...O3s, ...SO2s, ...IDEX_MVLs];
 
   for (let i = 0; i < elements.length; i++) {
     if (elements[i].innerText === "0") {
       elements[i].innerText = "-";
     }
-  }
+  } */
 
   // 보통, 좋음, 나쁨 색깔
   IDEX_NMs.forEach((IDEX_NM) => {
@@ -165,3 +196,8 @@ async function load() {
     }
   });
 }
+
+/* 과제
+차트를 3개 이상 그려서 표시하기 
+유형이 완전 다른 차트 3개를 그리기
+*/
