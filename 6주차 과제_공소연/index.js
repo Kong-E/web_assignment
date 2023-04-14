@@ -1,5 +1,6 @@
 let chart;
 let chart2;
+let chart3;
 
 function zeroToMinus(data) {
   if (data === 0 || data === "") {
@@ -22,9 +23,10 @@ async function load() {
   );
   const res2 = await res.json();
 
-  if (chart && chart2) {
+  if (chart && chart2 && chart3) {
     chart.destroy();
     chart2.destroy();
+    chart3.destroy();
   }
 
   console.log(res2.RealtimeCityAir);
@@ -44,6 +46,7 @@ async function load() {
   const labels = [];
   const dataList = [];
   const dataList2 = [];
+  const dataList3 = [];
   const IDEX_MVL_Arr = [];
 
   for (var i = 0; i < 25; i++) {
@@ -80,6 +83,7 @@ async function load() {
     labels.push(res2.RealtimeCityAir.row[i].MSRSTE_NM);
     dataList.push(res2.RealtimeCityAir.row[i].PM10);
     dataList2.push(res2.RealtimeCityAir.row[i].PM25);
+    dataList3.push(res2.RealtimeCityAir.row[i].IDEX_MVL);
     IDEX_MVL_Arr.push({
       [`row_${i}`]: res2.RealtimeCityAir.row[i].IDEX_MVL,
     });
@@ -88,6 +92,7 @@ async function load() {
   //chart
   const ctx = document.getElementById("myChart");
   const ctx2 = document.getElementById("myChart2");
+  const ctx3 = document.getElementById("myChart3");
 
   chart = new Chart(ctx, {
     type: "bar",
@@ -95,17 +100,20 @@ async function load() {
       labels: labels,
       datasets: [
         {
+          axis: "y",
           label: "PM10",
           data: dataList,
+          fill: false,
           borderWidth: 1,
-          backgroundColor: "#ff0000",
+          backgroundColor: "rgba(255, 159, 64, 0.2)",
+          borderColor: "rgb(255, 159, 64)",
           borderWidth: 1,
           borderRadius: 10,
-          borderSkipped: false,
         },
       ],
     },
     options: {
+      indexAxis: "y",
       scales: {
         y: {
           beginAtZero: true,
@@ -123,6 +131,29 @@ async function load() {
           label: "PM25",
           data: dataList2,
           borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  chart3 = new Chart(ctx3, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "IDEX_MVL",
+          data: dataList3,
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1,
         },
       ],
     },
