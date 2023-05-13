@@ -13,8 +13,13 @@ export const Title = styled.h1`
   position: absolute;
   top: 0;
   font-size: 30px;
-  background-color: rgba(255, 255, 255, 0.8);
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+`;
+
+export const WinnerTitle = styled(Title)`
+  font-size: 50px;
 `;
 
 export const ImgRoot = styled.div`
@@ -45,7 +50,7 @@ export const SelectedImg = styled(Img)`
   z-index: 2;
 `; */
 
-export const ImgTypoLeft = styled.div`
+export const LeftImgTypo = styled.div`
   position: absolute;
   right: 40px;
   bottom: 50px;
@@ -55,11 +60,11 @@ export const ImgTypoLeft = styled.div`
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 `;
 
-export const ImgTypoRight = styled(ImgTypoLeft)`
+export const RightImgTypo = styled(LeftImgTypo)`
   left: 40px;
 `;
 
-export const VSTypo = styled(ImgTypoLeft)`
+export const VSTypo = styled(LeftImgTypo)`
   right: auto;
   color: orangered;
 `;

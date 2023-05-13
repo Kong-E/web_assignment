@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 import p1 from "../assets/개.jpg";
 import p2 from "../assets/고슴도치.jpg";
 import p3 from "../assets/고양이.jpg";
@@ -19,11 +19,12 @@ import {
   Img,
   ImgContainer,
   ImgRoot,
-  ImgTypoLeft,
-  ImgTypoRight,
+  LeftImgTypo,
+  RightImgTypo,
   Root,
   Title,
   VSTypo,
+  WinnerTitle,
 } from "./styles.js";
 
 const candidate = [
@@ -45,33 +46,74 @@ const candidate = [
   { name: "호랑이", src: p16 },
 ];
 
-function Worldcup() {
-  // candidate.sort(() => Math.random() - 0.5);
+function preloadImage(obj) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = function () {
+      resolve({ ...obj, img });
+    };
+    img.onerror = img.onabort = function () {
+      reject(obj.src);
+    };
+    img.src = obj.src;
+  });
+}
 
-  const [game, setGame] = useState(
-    candidate
-      .map((c) => {
-        return { name: c.name, src: c.src, order: Math.random() };
-      })
-      .sort((l, r) => {
-        return l.order - r.order;
-      })
-  );
+function Worldcup() {
+  const [game, setGame] = useState([]);
   const [round, setRound] = useState(0);
-  const [nextGame, setNextGame] = useState([]); // 다음 라운드에 진출한 동물들
+  const [nextGame, setNextGame] = useState([]);
   const [showContent, setShowContent] = useState(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function effect() {
+      if (isCancelled) {
+        return;
+      }
+
+      const imagesPromiseList = candidate.map((obj) => preloadImage(obj));
+
+      console.log(imagesPromiseList);
+      try {
+        const loadedImages = await Promise.all(imagesPromiseList);
+        if (isCancelled) {
+          return;
+        }
+        console.log(loadedImages);
+
+        const shuffledGame = loadedImages
+          .sort(() => Math.random() - 0.5)
+          .map((c) => ({ name: c.name, src: c.img.src }));
+
+        setGame(shuffledGame);
+        setAssetsLoaded(true);
+      } catch (error) {
+        console.error("Failed to load images:", error);
+      }
+    }
+
+    effect();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const handleRound = (r) => {
     setShowContent(true);
 
     setTimeout(() => {
       setShowContent(false);
-    }, 1000);
+      setRound((prev) => prev + 1);
+    }, 3000);
+
     setNextGame((prev) => prev.concat(game[r]));
-    setRound((prev) => prev + 1);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (game.length > 1 && round + 1 > game.length / 2) {
       setGame(nextGame);
       setNextGame([]);
@@ -80,24 +122,26 @@ function Worldcup() {
   }, [round]);
   // console.log(candidate);
 
-  if (round + 1 > game.length / 2) {
-    if (game.length === 1) {
+  if (round + 1 > game.length / 2 || !assetsLoaded) {
+    if (game.length !== 1)
       return (
         <Root>
-          <Title>우승</Title>
-          <ImgContainer>
-            <Img src={game[0].src} width="500px" />
-            <ImgTypoLeft>{game[0].name}</ImgTypoLeft>
-          </ImgContainer>
+          <Title>로딩중...</Title>
         </Root>
       );
-    } else
-      <Root>
-        <Title>로딩중...</Title>
-      </Root>;
   }
-  /* 텍스트 쉐도우 표현, vs 표현, 타이틀은 이미지와 겹치게 opacity 부여해서, 선택하면 바로 넘어가는게 아니라
-  애니메이션이 포함돼서 선택한게 무엇인지 보여주게 끔 */
+
+  if (game.length === 1) {
+    return (
+      <Root>
+        <WinnerTitle>우승</WinnerTitle>
+        <ImgContainer>
+          <Img src={game[0].src} width="500px" />
+          <LeftImgTypo>{game[0].name}</LeftImgTypo>
+        </ImgContainer>
+      </Root>
+    );
+  }
 
   return (
     <Root>
@@ -109,17 +153,17 @@ function Worldcup() {
         {showContent && nextGame.length != 0 ? (
           <ImgContainer>
             <Img src={nextGame[nextGame.length - 1]?.src} />
-            <ImgTypoLeft>{nextGame[nextGame.length - 1]?.name}</ImgTypoLeft>
+            <LeftImgTypo>{nextGame[nextGame.length - 1]?.name}</LeftImgTypo>
           </ImgContainer>
         ) : (
           <>
             <ImgContainer onClick={() => handleRound(round * 2)}>
               <Img src={game[round * 2]?.src} />
-              <ImgTypoLeft>{game[round * 2]?.name}</ImgTypoLeft>
+              <LeftImgTypo>{game[round * 2]?.name}</LeftImgTypo>
             </ImgContainer>
             <ImgContainer onClick={() => handleRound(round * 2 + 1)}>
               <Img src={game[round * 2 + 1]?.src} />
-              <ImgTypoRight>{game[round * 2 + 1]?.name}</ImgTypoRight>
+              <RightImgTypo>{game[round * 2 + 1]?.name}</RightImgTypo>
             </ImgContainer>
             <VSTypo>VS</VSTypo>
           </>
