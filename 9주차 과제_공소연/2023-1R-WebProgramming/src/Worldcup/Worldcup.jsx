@@ -65,8 +65,29 @@ function Worldcup() {
   const [nextGame, setNextGame] = useState([]);
   const [showContent, setShowContent] = useState(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [stat, setStat] = useState({
+    개: 0,
+    고슴도치: 0,
+    고양이: 0,
+    기린: 0,
+    꿀꿀이: 0,
+    바다표범: 0,
+    부엉이: 0,
+    "주둥이가 큰 새": 0,
+    앵무새: 0,
+    원숭이: 0,
+    쥐: 0,
+    토끼: 0,
+    판다: 0,
+    하마: 0,
+    하프물범: 0,
+    호랑이: 0,
+  });
 
   useEffect(() => {
+    const 월드컵LocalStorageData = localStorage.getItem("월드컵");
+    월드컵LocalStorageData && setStat(JSON.parse(월드컵LocalStorageData));
+
     let isCancelled = false;
 
     async function effect() {
@@ -122,6 +143,18 @@ function Worldcup() {
   }, [round]);
   // console.log(candidate);
 
+  // 11주차 실습
+  const left = round * 2;
+  const right = round * 2 + 1;
+
+  const leftFunction = () => {
+    setStat({ ...stat, [game[left].name]: stat[game[left].name] + 1 });
+  };
+
+  const rightFunction = () => {
+    setStat({ ...stat, [game[right].name]: stat[game[right].name] + 1 });
+  };
+
   if (round + 1 > game.length / 2 || !assetsLoaded) {
     if (game.length !== 1)
       return (
@@ -132,16 +165,30 @@ function Worldcup() {
   }
 
   if (game.length === 1) {
+    localStorage.setItem("월드컵", JSON.stringify(stat));
     return (
       <Root>
         <WinnerTitle>우승</WinnerTitle>
         <ImgContainer>
           <Img src={game[0].src} width="500px" />
           <LeftImgTypo>{game[0].name}</LeftImgTypo>
+          <RightImgTypo>{stat[game[0].name]}번 승리</RightImgTypo>
+          <table>
+            {Object.keys(stat).map((name) => {
+              return (
+                <tr key={name}>
+                  <td>{name}</td>
+                  {stat[name]}
+                </tr>
+              );
+            })}
+          </table>
         </ImgContainer>
       </Root>
     );
   }
+
+  // 승리횟수를 막대기로 표기하기
 
   return (
     <Root>
@@ -157,11 +204,21 @@ function Worldcup() {
           </ImgContainer>
         ) : (
           <>
-            <ImgContainer onClick={() => handleRound(round * 2)}>
+            <ImgContainer
+              onClick={() => {
+                leftFunction();
+                handleRound(round * 2);
+              }}
+            >
               <Img src={game[round * 2]?.src} />
               <LeftImgTypo>{game[round * 2]?.name}</LeftImgTypo>
             </ImgContainer>
-            <ImgContainer onClick={() => handleRound(round * 2 + 1)}>
+            <ImgContainer
+              onClick={() => {
+                rightFunction();
+                handleRound(round * 2 + 1);
+              }}
+            >
               <Img src={game[round * 2 + 1]?.src} />
               <RightImgTypo>{game[round * 2 + 1]?.name}</RightImgTypo>
             </ImgContainer>
