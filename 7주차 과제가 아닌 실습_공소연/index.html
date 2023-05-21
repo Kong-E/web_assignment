@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      function callback() {
+        fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/25"
+        ).then(function (res) {
+          res.json().then(function (data) {
+            document.body.innerHTML += JSON.stringify(data);
+          });
+        });
+      }
+
+      // async를 붙이면 무조건 함수가 비동기로 실행
+      async function asyncawait() {
+        const res = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/25/동북권"
+        );
+        const data = await res.json();
+        document.body.innerHTML += JSON.stringify(data);
+      }
+
+      asyncawait().then(function () {
+        console.log("끝");
+      });
+
+      function fiveAPI() {
+        const 도심권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/도심권"
+        );
+        const 서북권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서북권"
+        );
+        const 서남권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서남권"
+        );
+        const 동북권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동북권"
+        );
+        const 동남권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동남권"
+        );
+
+        // 리스트 안에 있는 각각의 프로미스들을 던져주면 5개의 프로미스들이 다 실행이 된 시점에 then으로 감
+        // 비동기
+        Promise.all([도심권, 서북권, 서남권, 동북권, 동남권]).then(function (
+          res
+        ) {
+          res[0].json().then(function (data) {
+            // res[0] == 도심권
+            document.body.innerHTML += JSON.stringify(data);
+          });
+        });
+      }
+
+      // 동기적
+      async function fiveAsyncAPI() {
+        const 도심권 = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/도심권"
+        );
+        const 서북권 = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서북권"
+        );
+        const 서남권 = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서남권"
+        );
+        const 동북권 = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동북권"
+        );
+        const 동남권 = await fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동남권"
+        );
+
+        /*
+        const 도심권json = await 도심권.json();
+        const 서북권json = await 서북권.json();
+        const 서남권json = await 서남권.json();
+        const 동북권json = await 동북권.json();
+        const 동남권json = await 동남권.json();
+
+        document.body.innerHTML += JSON.stringify(도심권json);
+        document.body.innerHTML += JSON.stringify(서북권json);
+        document.body.innerHTML += JSON.stringify(서남권json);
+        document.body.innerHTML += JSON.stringify(동북권json);
+        document.body.innerHTML += JSON.stringify(동남권json); */
+      }
+
+      function fiveRaceAPI() {
+        const 도심권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/도심권"
+        );
+        const 서북권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서북권"
+        );
+        const 서남권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/서남권"
+        );
+        const 동북권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동북권"
+        );
+        const 동남권 = fetch(
+          "http://openapi.seoul.go.kr:8088/72534779436772613635674d596a53/json/RealtimeCityAir/1/5/동남권"
+        );
+
+        // 전달된 내용 중 먼저 도착한 하나만 가져옴
+        Promise.race([도심권, 서북권, 서남권, 동북권, 동남권]).then(function (
+          res
+        ) {
+          res.json().then(function (data) {
+            document.body.innerHTML += JSON.stringify(data);
+          });
+        });
+      }
+
+      window.clicked = false;
+
+      function game() {
+        if (window.clicked) {
+          window.clicked = false;
+          window.reject("실패");
+        } else {
+          window.clicked = true;
+
+          const pro = new Promise(function (resolve, reject) {
+            window.reject = reject;
+            setTimeout(function () {
+              resolve("성공");
+            }, 3000);
+          });
+
+          pro
+            .then(function (res) {
+              window.clicked = false;
+              alert(res);
+            })
+            .catch(function (err) {
+              window.clicked = false;
+              alert(err);
+            });
+        }
+      }
+
+      async function wrongPromise() {
+        const pro = new Promise(function (resolve, reject) {});
+        await pro;
+        alert("성공");
+      }
+
+      // 5초안에 클릭을 안하면 실패
+      // 버튼을 누르고 3~5초 사이에 다시 눌러야 성공하는 게임
+      // 랜덤한 애국가 문장을 주고, 애국가 문장을 10초안에 타이핑 완성해서 엔터치는 게임
+
+      function typing(e) {
+        console.log(e.target.value);
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="fiveAPI()">fiveAPI</button>
+    <button onclick="fiveAsyncAPI()">fiveAsyncAPI</button>
+    <button onclick="fiveRaceAPI()">fiveRaceAPI</button>
+    <button onclick="game()">promise</button>
+
+    <input id="type" type="text" onchange="typing()" />
+  </body>
+</html>

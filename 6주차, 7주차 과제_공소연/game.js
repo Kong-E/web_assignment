@@ -16,6 +16,7 @@ function startGame() {
       };
 
       setTimeout(() => {
+        console.log("거쳐감");
         gameStarted = false;
         resolve("성공");
       }, 3000);
