@@ -29,6 +29,7 @@ import {
 // import { EpisodeState } from "../store/episode";
 // import { useRecoilState } from "recoil";
 import { loadImage } from "../../utils/preloadImage";
+import { useLoaderData } from "react-router";
 
 const candidate = [
   { name: "개", src: p1 },
@@ -51,6 +52,7 @@ const candidate = [
 
 function Worldcup() {
   // const [state, dispatch] = useReducer(() => {}, initialState);
+  // const Data = useLoaderData();
   const [game, setGame] = useState([]);
   const [round, setRound] = useState(0);
   const [nextGame, setNextGame] = useState([]);

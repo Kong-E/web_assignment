@@ -1,4 +1,4 @@
-import "./App.css";
+import "./mise.css";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -37,15 +37,7 @@ function App() {
   // console.log(row);
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="root">
       {/* MSRRGN_NM, O3, PM10, IDEX_NM */}
       <button onClick={onClickAPILoad}>불러오기</button>
       <table>
