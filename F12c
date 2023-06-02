@@ -1,0 +1,21 @@
+feat : react-router@6 Outlet 적용
+
+지진알리미 헤더에 적용하면 좋을 것 같음
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Fri Jun 2 23:35:03 2023 +0900
+#
+# On branch main
+# Your branch is ahead of 'origin/main' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	new file:   package-lock.json
+#	modified:   package.json
+#	modified:   src/Worldcup/Worldcup.jsx
+#	modified:   src/main.jsx
+#	new file:   src/store/episode.js
+#	new file:   src/utils/preloadImage.js
+#	modified:   yarn.lock
+#

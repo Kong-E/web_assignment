@@ -1,20 +1,20 @@
 import { useLayoutEffect, useEffect, useState } from "react";
-import p1 from "../assets/개.jpg";
-import p2 from "../assets/고슴도치.jpg";
-import p3 from "../assets/고양이.jpg";
-import p4 from "../assets/기린.jpg";
-import p5 from "../assets/꿀꿀이.jpg";
-import p6 from "../assets/바다표범.jpg";
-import p7 from "../assets/부엉이.jpg";
-import p8 from "../assets/새1.jpg";
-import p9 from "../assets/새2.jpg";
-import p10 from "../assets/원숭이.jpg";
-import p11 from "../assets/쥐.jpg";
-import p12 from "../assets/토끼.jpg";
-import p13 from "../assets/판다.jpg";
-import p14 from "../assets/하마.jpg";
-import p15 from "../assets/하프물범.jpg";
-import p16 from "../assets/호랑이.jpg";
+import p1 from "../../assets/개.jpg";
+import p2 from "../../assets/고슴도치.jpg";
+import p3 from "../../assets/고양이.jpg";
+import p4 from "../../assets/기린.jpg";
+import p5 from "../../assets/꿀꿀이.jpg";
+import p6 from "../../assets/바다표범.jpg";
+import p7 from "../../assets/부엉이.jpg";
+import p8 from "../../assets/새1.jpg";
+import p9 from "../../assets/새2.jpg";
+import p10 from "../../assets/원숭이.jpg";
+import p11 from "../../assets/쥐.jpg";
+import p12 from "../../assets/토끼.jpg";
+import p13 from "../../assets/판다.jpg";
+import p14 from "../../assets/하마.jpg";
+import p15 from "../../assets/하프물범.jpg";
+import p16 from "../../assets/호랑이.jpg";
 import {
   Img,
   ImgContainer,
@@ -28,7 +28,7 @@ import {
 } from "./styles.js";
 // import { EpisodeState } from "../store/episode";
 // import { useRecoilState } from "recoil";
-import { loadImage } from "../utils/preloadImage";
+import { loadImage } from "../../utils/preloadImage";
 
 const candidate = [
   { name: "개", src: p1 },

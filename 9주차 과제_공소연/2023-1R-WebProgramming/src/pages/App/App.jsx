@@ -37,7 +37,15 @@ function App() {
   // console.log(row);
 
   return (
-    <>
+    <div
+      style={{
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {/* MSRRGN_NM, O3, PM10, IDEX_NM */}
       <button onClick={onClickAPILoad}>불러오기</button>
       <table>
@@ -78,7 +86,7 @@ function App() {
       {/*       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p> */}
-    </>
+    </div>
   );
 }
 

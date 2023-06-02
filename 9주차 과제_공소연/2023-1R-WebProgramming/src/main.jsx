@@ -1,20 +1,16 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import Worldcup from "./Worldcup/Worldcup.jsx";
+import Worldcup from "./pages/Worldcup/Worldcup.jsx";
 import { RecoilRoot } from "recoil";
 import React from "react";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
-import App from "./App";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import App from "./pages/App/App";
+import Root from "./components/Root";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div>
-        메인페이지
-        <Outlet />
-      </div>
-    ),
+    element: <Root />,
     errorElement: <div>아이고 에러가 났어요</div>,
     children: [
       {
