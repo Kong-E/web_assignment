@@ -26,6 +26,9 @@ import {
   VSTypo,
   WinnerTitle,
 } from "./styles.js";
+// import { EpisodeState } from "../store/episode";
+// import { useRecoilState } from "recoil";
+import { loadImage } from "../utils/preloadImage";
 
 const candidate = [
   { name: "개", src: p1 },
@@ -46,20 +49,8 @@ const candidate = [
   { name: "호랑이", src: p16 },
 ];
 
-function preloadImage(obj) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = function () {
-      resolve({ ...obj, img });
-    };
-    img.onerror = img.onabort = function () {
-      reject(obj.src);
-    };
-    img.src = obj.src;
-  });
-}
-
 function Worldcup() {
+  // const [state, dispatch] = useReducer(() => {}, initialState);
   const [game, setGame] = useState([]);
   const [round, setRound] = useState(0);
   const [nextGame, setNextGame] = useState([]);
@@ -84,44 +75,27 @@ function Worldcup() {
     호랑이: 0,
   });
 
+  // const [epi, setEpi] = useRecoilState(EpisodeState);
+
   useEffect(() => {
+    // setEpi(1);
     const 월드컵LocalStorageData = localStorage.getItem("2020110210");
     월드컵LocalStorageData && setStat(JSON.parse(월드컵LocalStorageData));
 
     let isCancelled = false;
 
-    async function effect() {
-      if (isCancelled) {
-        return;
-      }
-
-      const imagesPromiseList = candidate.map((obj) => preloadImage(obj));
-
-      console.log(imagesPromiseList);
-      try {
-        const loadedImages = await Promise.all(imagesPromiseList);
-        if (isCancelled) {
-          return;
-        }
-        console.log(loadedImages);
-
-        const shuffledGame = loadedImages
-          .sort(() => Math.random() - 0.5)
-          .map((c) => ({ name: c.name, src: c.img.src }));
-
-        setGame(shuffledGame);
-        setAssetsLoaded(true);
-      } catch (error) {
-        console.error("Failed to load images:", error);
-      }
-    }
-
-    effect();
+    loadImage(isCancelled, candidate, setGame, setAssetsLoaded);
 
     return () => {
       isCancelled = true;
     };
   }, []);
+
+  // useEffect(() => {
+  //   if (epi === 1) document.title = "첫번째게임";
+  //   else if (epi === 2) document.title = "두번째게임";
+  //   else if (epi >= 3) document.title = "게임이용시간이 3시간 지났습니다";
+  // }, [epi]); // 이제는 전역변수처럼 동작함
 
   const handleRound = (r) => {
     setShowContent(true);
