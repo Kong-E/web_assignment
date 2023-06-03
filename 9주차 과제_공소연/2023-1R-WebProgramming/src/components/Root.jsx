@@ -18,7 +18,7 @@ const Root = () => {
           fontSize: "20px",
           fontWeight: "bold",
           color: "gray",
-          zIndex: "100",
+          zIndex: "1",
         }}
       >
         <div>

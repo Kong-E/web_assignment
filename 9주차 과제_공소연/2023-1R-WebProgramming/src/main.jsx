@@ -42,6 +42,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RecoilRoot>
       <RouterProvider router={router} />
+      {/* <Worldcup /> */}
     </RecoilRoot>
   </React.StrictMode>
 );

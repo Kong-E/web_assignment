@@ -1,4 +1,4 @@
-import "./mise.css";
+import "../../App.css";
 import { useEffect, useState } from "react";
 
 function App() {
