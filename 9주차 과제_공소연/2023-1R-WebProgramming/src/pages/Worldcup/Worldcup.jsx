@@ -1,4 +1,5 @@
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import p1 from "../../assets/개.jpg";
 import p2 from "../../assets/고슴도치.jpg";
 import p3 from "../../assets/고양이.jpg";
@@ -27,6 +28,14 @@ import {
   WinnerTitle,
 } from "./styles.js";
 import { preloadImage } from "../../utils/preloadImage";
+import {
+  assetsLoadedAtom,
+  gameAtom,
+  nextGameAtom,
+  roundAtom,
+  showContentAtom,
+  statAtom,
+} from "../../store/atom";
 
 const candidate = [
   { name: "개", src: p1 },
@@ -47,7 +56,7 @@ const candidate = [
   { name: "호랑이", src: p16 },
 ];
 
-const initialState = {
+/* const initialState = {
   game: [],
   round: 0,
   nextGame: [],
@@ -90,132 +99,90 @@ const reducer = (state, action) => {
     default:
       return state;
   }
-};
+}; */
 
 function Worldcup() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleRound = (r) => {
-    dispatch({
-      type: "SET_SHOW_CONTENT",
-      payload: true,
-    });
-
-    dispatch({
-      type: "SET_NEXT_GAME",
-      payload: state.nextGame.concat(state.game[r]),
-    });
-
-    dispatch({
-      type: "SET_STAT",
-      payload: {
-        ...state.stat,
-        [state.game[r].name]: state.stat[state.game[r].name] + 1,
-      },
-    });
-
-    setTimeout(() => {
-      dispatch({
-        type: "SET_SHOW_CONTENT",
-        payload: false,
-      });
-
-      dispatch({
-        type: "SET_ROUND",
-        payload: state.round + 1,
-      });
-    }, 3000);
-  };
+  const [game, setGame] = useRecoilState(gameAtom);
+  const [round, setRound] = useRecoilState(roundAtom);
+  const [nextGame, setNextGame] = useRecoilState(nextGameAtom);
+  const [showContent, setShowContent] = useRecoilState(showContentAtom);
+  const [assetsLoaded, setAssetsLoaded] = useRecoilState(assetsLoadedAtom);
+  const [stat, setStat] = useRecoilState(statAtom);
 
   useEffect(() => {
-    const 월드컵LocalStorageData = localStorage.getItem("2020110210");
-    월드컵LocalStorageData &&
-      dispatch({
-        type: "SET_STAT",
-        payload: JSON.parse(월드컵LocalStorageData),
-      });
-
-    let isCancelled = false;
-
-    async function loadImage() {
-      if (isCancelled) {
-        return;
-      }
-
-      const imagesPromiseList = candidate.map((obj) => preloadImage(obj));
-
-      console.log(imagesPromiseList);
-
+    const loadImage = async () => {
       try {
-        const loadedImages = await Promise.all(imagesPromiseList);
-        if (isCancelled) {
-          return;
-        }
+        const loadedImages = await Promise.all(
+          candidate.map((obj) => preloadImage(obj))
+        );
+
         console.log(loadedImages);
 
         const shuffledGame = loadedImages
           .sort(() => Math.random() - 0.5)
           .map((c) => ({ name: c.name, src: c.img.src }));
 
-        dispatch({ type: "SET_GAME", payload: shuffledGame });
-        dispatch({ type: "SET_ASSETS_LOADED", payload: true });
+        console.log(shuffledGame);
+
+        setGame(shuffledGame);
+        setAssetsLoaded(true);
       } catch (error) {
         console.error("Failed to load images:", error);
       }
-    }
+    };
 
     loadImage();
-
-    return () => {
-      isCancelled = true;
-    };
   }, []);
 
-  useEffect(() => {
-    if (state.game.length > 1 && state.round + 1 > state.game.length / 2) {
-      dispatch({
-        type: "SET_GAME",
-        payload: state.nextGame,
-      });
-      dispatch({
-        type: "SET_NEXT_GAME",
-        payload: [],
-      });
-      dispatch({
-        type: "SET_ROUND",
-        payload: 0,
-      });
-    }
-  }, [state.round, state.game.length, state.nextGame]);
+  const handleRound = (r) => {
+    setShowContent(true);
+    setNextGame([...nextGame, game[r]]);
 
-  if (state.round + 1 > state.game.length / 2 || !state.assetsLoaded) {
-    if (state.game.length !== 1)
+    const updatedStat = { ...stat, [game[r].name]: stat[game[r].name] + 1 };
+    setStat(updatedStat);
+
+    setTimeout(() => {
+      setShowContent(false);
+      setRound(round + 1);
+    }, 800);
+  };
+
+  useEffect(() => {
+    if (game.length > 1 && round + 1 > game.length / 2) {
+      setGame(nextGame);
+      setNextGame([]);
+      setRound(0);
+    }
+  }, [round, game.length, nextGame]);
+
+  if (round + 1 > game.length / 2 || !assetsLoaded) {
+    if (game.length !== 1) {
       return (
         <Root>
           <Title>로딩중...</Title>
         </Root>
       );
+    }
   }
 
-  if (state.game.length === 1) {
-    localStorage.setItem("2020110210", JSON.stringify(state.stat));
+  if (game.length === 1) {
     return (
       <Root>
-        <WinnerTitle>우승</WinnerTitle>
+        <WinnerTitle>{game[0].name} 우승!</WinnerTitle>
         <ImgContainer>
-          <Img src={state.game[0].src} width="500px" />
-          <LeftImgTypo>{state.game[0].name}</LeftImgTypo>
-          <RightImgTypo>{state.stat[state.game[0].name]}번 승리</RightImgTypo>
-          <table>
-            {Object.keys(state.stat).map((name) => {
+          <Img src={game[0].src} alt={game[0].name} />
+          <LeftImgTypo>{game[0].name}</LeftImgTypo>
+          <RightImgTypo>{stat[game[0].name]} wins</RightImgTypo>
+          {/*           <table>
+            {Object.keys(stat).map((name) => {
               return (
                 <tr key={name}>
                   <td>{name}</td>
-                  {state.stat[name]}
+                  {stat[name]}
                 </tr>
               );
             })}
-          </table>
+          </table> */}
         </ImgContainer>
       </Root>
     );
@@ -224,30 +191,30 @@ function Worldcup() {
   return (
     <Root>
       <Title>
-        귀여운 동물 월드컵 {state.round + 1} / {state.game.length / 2}{" "}
-        <b>
-          &lt;{state.game.length === 2 ? "결승" : state.game.length + "강"}&gt;
-        </b>
+        🐶🐺🐱🐷🐭🐰🐼🐸🐯 {round + 1} / {game.length / 2}{" "}
+        <b>&lt;{game.length === 2 ? "결승" : `${game.length}강`}&gt;</b>
       </Title>
       <ImgRoot>
-        {state.showContent ? (
+        {showContent ? (
           <ImgContainer>
-            <Img src={state.nextGame[state.nextGame.length - 1]?.src} />
-            <LeftImgTypo>
-              {state.nextGame[state.nextGame.length - 1]?.name}
-            </LeftImgTypo>
+            <Img
+              src={nextGame[nextGame.length - 1]?.src}
+              alt={nextGame[nextGame.length - 1]?.name}
+            />
+            <LeftImgTypo>{nextGame[nextGame.length - 1]?.name}</LeftImgTypo>
           </ImgContainer>
         ) : (
           <>
-            <ImgContainer onClick={() => handleRound(state.round * 2)}>
-              <Img src={state.game[state.round * 2]?.src} />
-              <LeftImgTypo>{state.game[state.round * 2]?.name}</LeftImgTypo>
+            <ImgContainer onClick={() => handleRound(round * 2)}>
+              <Img src={game[round * 2]?.src} alt={game[round * 2]?.name} />
+              <LeftImgTypo>{game[round * 2]?.name}</LeftImgTypo>
             </ImgContainer>
-            <ImgContainer onClick={() => handleRound(state.round * 2 + 1)}>
-              <Img src={state.game[state.round * 2 + 1]?.src} />
-              <RightImgTypo>
-                {state.game[state.round * 2 + 1]?.name}
-              </RightImgTypo>
+            <ImgContainer onClick={() => handleRound(round * 2 + 1)}>
+              <Img
+                src={game[round * 2 + 1]?.src}
+                alt={game[round * 2 + 1]?.name}
+              />
+              <RightImgTypo>{game[round * 2 + 1]?.name}</RightImgTypo>
             </ImgContainer>
             <VSTypo>VS</VSTypo>
           </>
